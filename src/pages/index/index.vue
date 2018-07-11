@@ -17,7 +17,7 @@
       <input type="text" class="form-control" v-model="motto" placeholder="v-model"/>
       <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy"/>
     </form>
-    <a href="/pages/counter/main" class="counter">去往Vuex示例页面</a>
+    <button open-type="getUserInfo" class="counter" @click="getUserInfo">获取授权</button>
     <a href="/pages/live/main" class="counter">去往直播页面</a>
   </div>
 </template>
@@ -48,7 +48,8 @@ export default {
         success: () => {
           wx.getUserInfo({
             success: (res) => {
-              this.userInfo = res.userInfo
+              this.userInfo = Object.assign({}, this.userInfo, res.userInfo)
+              console.log(this.userInfo)
             }
           })
         }
@@ -60,10 +61,8 @@ export default {
   },
 
   created () {
-    // 调用应用实例的方法获取全局数据
-    this.getUserInfo()
     wx.request({
-      url: 'http://localhost:3000/api/user/token',
+      url: 'https://runighcat.com/api/user/token',
       method: 'post',
       data: {
         'username': '15930181489',

@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <live-player
-      src="rtmp://25777.hlsplay.aodianyun.com/smarket_dev/stream20180710152103_412?k=94f1e8eb09a738dd600f0deefea4f604&t=1531207263"
-      mode="RTC" autoplay bindstatechange="statechange" binderror="error"
-      style="width: 300px; height: 225px;"/>
+      src="rtmp://25777.lssplay.aodianyun.com/smarket_test/stream20180711142726_447?k=343d652e542a75ad48a35d566ca89511&t=1531290446"
+      autoplay @statechange="stateChange" @error="error"
+      style="width: 100%; height: 225px;"/>
   </div>
 </template>
 
@@ -28,20 +28,8 @@ export default {
       wx.navigateTo({url})
     },
     getUserInfo () {
-      // 调用登录接口
-      wx.login({
-        success: () => {
-          wx.getUserInfo({
-            success: (res) => {
-              this.userInfo = Object.assign({}, this.userInfo, res.userInfo)
-              console.log(this.userInfo)
-            }
-          })
-        }
-      })
-
       wx.request({
-        url: 'http://localhost:3000/api/user',
+        url: 'https://runighcat.com/api/user',
         method: 'get',
         header: {
           'content-type': 'application/json',
@@ -55,15 +43,18 @@ export default {
     },
     clickHandle (msg, ev) {
       console.log('clickHandle:', msg, ev)
+    },
+    stateChange (e) {
+      console.log('live-player code:', e.mp.detail.code)
+    },
+    error (e) {
+      console.error('live-player error:', e.mp.detail.errMsg)
     }
   },
 
   created () {
-    // 调用应用实例的方法获取全局数据
-    this.getUserInfo()
-
     wx.connectSocket({
-      url: 'ws://localhost:3000/ws',
+      url: 'wss://runighcat.com/ws',
       data: {
         x: '',
         y: ''
