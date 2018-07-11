@@ -9,6 +9,7 @@
 
 <script>
 import card from '@/components/card'
+import io from 'weapp.socket.io'
 
 export default {
   data () {
@@ -53,17 +54,12 @@ export default {
   },
 
   created () {
-    wx.connectSocket({
-      url: 'wss://runighcat.com/ws',
-      data: {
-        x: '',
-        y: ''
-      },
-      header: {
-        'content-type': 'application/json'
-      },
-      protocols: ['protocol1'],
-      method: 'GET'
+    const socket = io.connect('https://runighcat.com/webinar', {
+      path: '/socketio/socket.io'
+    })
+
+    socket.emit('userJoin', {
+      userName: 'spx'
     })
   }
 }
