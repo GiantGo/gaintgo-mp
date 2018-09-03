@@ -1,10 +1,10 @@
-import { signIn, signUp, getMyInfo } from '@/api/user'
+import { signIn, getMyInfo } from '@/api/user'
 import { setToken, removeToken } from '@/utils/token'
 
 const state = {
   email: '',
   avatar: '',
-  nickName: '',
+  nickname: '',
   token: '',
   roles: [],
   permissions: []
@@ -13,29 +13,23 @@ const state = {
 const getters = {
   email: state => state.email,
   avatar: state => state.avatar,
+  nickname: state => state.nickname,
   token: state => state.token,
   roles: state => state.roles,
   permissions: state => state.permissions
 }
 
 const actions = {
-  signUp ({commit}, userInfo) {
-    return signUp(userInfo).then((response) => {
-      const token = response.data.token
-      setToken(token)
-      commit('setToken', token)
-    })
-  },
-  signIn ({commit}, {userName, password}) {
-    return signIn(userName, password).then((response) => {
-      const token = response.data.token
-      setToken(token)
-      commit('setToken', token)
+  signIn ({commit}, code) {
+    return signIn(code).then(({data}) => {
+      setToken(data.token)
+      commit('setToken', data.token)
     })
   },
   logout ({commit}) {
     commit('setEmail', '')
     commit('setAvatar', '')
+    commit('setNickname', '')
     commit('setRoles', '')
     commit('setPermissions', '')
     commit('setToken', '')
@@ -50,6 +44,10 @@ const actions = {
       commit('setRoles', userInfo.roles)
       commit('setPermissions', userInfo.permissions)
     })
+  },
+  setUserInfo ({commit}, userInfo) {
+    commit('setNickname', userInfo.nickname)
+    commit('setAvatar', userInfo.avatar)
   }
 }
 
@@ -63,8 +61,8 @@ const mutations = {
   setAvatar (state, avatar) {
     state.avatar = avatar
   },
-  setNickName: (state, nickName) => {
-    state.nickName = nickName
+  setNickname: (state, nickname) => {
+    state.nickname = nickname
   },
   setRoles (state, roles) {
     state.roles = roles

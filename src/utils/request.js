@@ -1,7 +1,6 @@
-import { getToken } from '@/utils/token'
+import { getToken, removeToken } from '@/utils/token'
 
-// create an axios instance
-const request = function (options) {
+const service = function (options) {
   return new Promise((resolve, reject) => {
     let header = {
       'Content-Type': 'application/json'
@@ -14,13 +13,14 @@ const request = function (options) {
     }
 
     wx.request({
-      url: options.url,
+      url: process.env.PREFIX_URL + options.url,
       data: Object.assign({}, options.data),
       method: options.methods || 'GET',
       header: Object.assign(header, options.header),
       success: resolve,
       fail: function (error) {
         if (error.status === 401) {
+          removeToken()
           wx.navigateTo({url: 'pages/index/main'})
         }
 
@@ -30,4 +30,4 @@ const request = function (options) {
   })
 }
 
-export default request
+export default service

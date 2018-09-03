@@ -1,6 +1,6 @@
 <template>
   <div class="container" @click="clickHandle('test click', $event)">
-    <div class="userinfo" @click="bindViewTap">
+    <div class="userinfo">
       <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover"/>
       <div class="userinfo-nickname">
         <card :text="userInfo.nickName"></card>
@@ -18,12 +18,12 @@
       <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy"/>
     </form>
     <button open-type="getUserInfo" class="counter" @click="getUserInfo">获取授权</button>
-    <a href="/pages/live/main" class="counter">去往直播页面</a>
   </div>
 </template>
 
 <script>
 import card from '@/components/card'
+// import { mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -32,52 +32,27 @@ export default {
       userInfo: {}
     }
   },
-
+  computed: {
+    // ...mapGetters([
+    //   'nickname',
+    //   'avatar'
+    // ])
+  },
   components: {
     card
   },
 
   methods: {
-    bindViewTap () {
-      const url = '../logs/main'
-      wx.navigateTo({url})
-    },
     getUserInfo () {
-      // 调用登录接口
-      wx.login({
-        success: () => {
-          wx.getUserInfo({
-            success: (res) => {
-              this.userInfo = Object.assign({}, this.userInfo, res.userInfo)
-              console.log(this.userInfo)
-            }
-          })
+      wx.getUserInfo({
+        success: (res) => {
+          this.$store.dispatch('setUserInfo', res.userInfo)
         }
       })
     },
     clickHandle (msg, ev) {
       console.log('clickHandle:', msg, ev)
     }
-  },
-
-  created () {
-    wx.request({
-      url: 'https://runighcat.com/api/user/token',
-      method: 'post',
-      data: {
-        'username': '15930181489',
-        'password': 'Pass@word1'
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success: function (res) {
-        wx.setStorage({
-          key: 'token',
-          data: res.data.token
-        })
-      }
-    })
   }
 }
 </script>
