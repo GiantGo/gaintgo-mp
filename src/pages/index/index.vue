@@ -1,9 +1,9 @@
 <template>
   <div class="container" @click="clickHandle('test click', $event)">
     <div class="userinfo">
-      <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover"/>
+      <img class="userinfo-avatar" v-if="avatar" :src="avatar" background-size="cover"/>
       <div class="userinfo-nickname">
-        <card :text="userInfo.nickName"></card>
+        <card :text="nickname"></card>
       </div>
     </div>
 
@@ -23,7 +23,7 @@
 
 <script>
 import card from '@/components/card'
-// import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -33,10 +33,10 @@ export default {
     }
   },
   computed: {
-    // ...mapGetters([
-    //   'nickname',
-    //   'avatar'
-    // ])
+    ...mapGetters([
+      'nickname',
+      'avatar'
+    ])
   },
   components: {
     card

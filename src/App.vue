@@ -3,15 +3,17 @@ export default {
   created () {
   },
   onLaunch () {
+    const that = this
+
     wx.checkSession({
       success: function () {
-        this.$store.commit('getMyInfo')
+        that.$store.dispatch('getMyInfo')
       },
       fail: function () {
         wx.login({
           success: (res) => {
             if (res.code) {
-              this.$store.commit('signIn', res.code)
+              this.$store.dispatch('signIn', res.code)
             }
           }
         })

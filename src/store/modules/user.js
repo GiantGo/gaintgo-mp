@@ -46,8 +46,8 @@ const actions = {
     })
   },
   setUserInfo ({commit}, userInfo) {
-    commit('setNickname', userInfo.nickname)
-    commit('setAvatar', userInfo.avatar)
+    commit('setNickname', userInfo.nickName)
+    commit('setAvatar', userInfo.avatarUrl)
   }
 }
 

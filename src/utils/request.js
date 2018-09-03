@@ -13,7 +13,7 @@ const service = function (options) {
     }
 
     wx.request({
-      url: process.env.PREFIX_URL + options.url,
+      url: 'http://localhost:4000/api' + options.url,
       data: Object.assign({}, options.data),
       method: options.methods || 'GET',
       header: Object.assign(header, options.header),
