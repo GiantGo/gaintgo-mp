@@ -13,7 +13,7 @@ export default {
         wx.login({
           success: (res) => {
             if (res.code) {
-              this.$store.dispatch('signIn', res.code)
+              that.$store.dispatch('signIn', res.code)
             }
           }
         })
