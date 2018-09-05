@@ -9,11 +9,11 @@ const service = function (options) {
     const token = getToken()
 
     if (token) {
-      header['authorization'] = 'Bearer ' + token
+      header['X-Token'] = token
     }
 
     wx.request({
-      url: 'http://localhost:4000/api' + options.url,
+      url: 'https://shapi.yingxiaobu.com/miniprogram/v1' + options.url,
       data: Object.assign({}, options.data),
       method: options.methods || 'GET',
       header: Object.assign(header, options.header),

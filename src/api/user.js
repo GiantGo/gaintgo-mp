@@ -1,18 +1,13 @@
 import request from '@/utils/request'
 
-export function signIn (code) {
+export function signIn (data) {
   return request({
-    url: '/login',
+    url: '/Account',
     methods: 'post',
     data: {
-      code: code
+      code: data.code,
+      iv: data.iv,
+      encryptedData: data.encryptedData
     }
-  })
-}
-
-export function getMyInfo () {
-  return request({
-    url: '/user',
-    method: 'get'
   })
 }

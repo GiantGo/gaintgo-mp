@@ -1,74 +1,37 @@
-import { signIn, getMyInfo } from '@/api/user'
+import { signIn } from '@/api/user'
 import { setToken, removeToken } from '@/utils/token'
 
 const state = {
-  email: '',
   avatar: '',
-  nickname: '',
-  token: '',
-  roles: [],
-  permissions: []
+  nickName: ''
 }
 
 const getters = {
-  email: state => state.email,
   avatar: state => state.avatar,
-  nickname: state => state.nickname,
-  token: state => state.token,
-  roles: state => state.roles,
-  permissions: state => state.permissions
+  nickName: state => state.nickName
 }
 
 const actions = {
-  signIn ({commit}, code) {
-    return signIn(code).then(({data}) => {
-      setToken(data.token)
-      commit('setToken', data.token)
+  signIn ({commit}, data) {
+    return signIn(data).then((res) => {
+      setToken(res.data.token)
+      commit('setAvatar', res.data.avatarUrl)
+      commit('setNickName', res.data.nickName)
     })
   },
   logout ({commit}) {
-    commit('setEmail', '')
     commit('setAvatar', '')
-    commit('setNickname', '')
-    commit('setRoles', '')
-    commit('setPermissions', '')
-    commit('setToken', '')
+    commit('setNickName', '')
     removeToken()
-  },
-  getMyInfo ({commit}) {
-    return getMyInfo().then((response) => {
-      let userInfo = response.data
-
-      commit('setEmail', userInfo.email)
-      commit('setAvatar', userInfo.avatar)
-      commit('setRoles', userInfo.roles)
-      commit('setPermissions', userInfo.permissions)
-    })
-  },
-  setUserInfo ({commit}, userInfo) {
-    commit('setNickname', userInfo.nickName)
-    commit('setAvatar', userInfo.avatarUrl)
   }
 }
 
 const mutations = {
-  setToken (state, token) {
-    state.token = token
-  },
-  setEmail (state, email) {
-    state.email = email
-  },
   setAvatar (state, avatar) {
     state.avatar = avatar
   },
-  setNickname: (state, nickname) => {
-    state.nickname = nickname
-  },
-  setRoles (state, roles) {
-    state.roles = roles
-  },
-  setPermissions (state, permissions) {
-    state.permissions = permissions
+  setNickName: (state, nickName) => {
+    state.nickName = nickName
   }
 }
 

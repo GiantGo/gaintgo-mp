@@ -3,22 +3,6 @@ export default {
   created () {
   },
   onLaunch () {
-    const that = this
-
-    wx.checkSession({
-      success: function () {
-        that.$store.dispatch('getMyInfo')
-      },
-      fail: function () {
-        wx.login({
-          success: (res) => {
-            if (res.code) {
-              that.$store.dispatch('signIn', res.code)
-            }
-          }
-        })
-      }
-    })
   }
 }
 </script>
