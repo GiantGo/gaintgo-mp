@@ -59,7 +59,10 @@ export default {
     navigateToRoom () {
       const that = this
 
-      that.$store.dispatch('getRoomDevices').then(() => {
+      that.$store.dispatch('getOrders').then((orders) => {
+        wx.navigateTo({
+          url: 'pages/live/main?orderId=' + orders[0].orderId
+        })
       }).catch(() => {
         $Toast({
           content: '未发现订单',
@@ -77,9 +80,5 @@ export default {
 </script>
 
 <style scoped>
-  .demo-container {
-    width: 100%;
-    height: 100%;
-    background-color: #fff;
-  }
+
 </style>
