@@ -1,8 +1,13 @@
 <script>
+import { getToken } from '@/utils/token'
+
 export default {
   created () {
   },
   onLaunch () {
+    if (getToken()) {
+      this.$store.dispatch('getMyInfo', getToken())
+    }
   }
 }
 </script>

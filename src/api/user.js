@@ -11,3 +11,10 @@ export function signIn (data) {
     }
   })
 }
+
+export function getMyInfo () {
+  return request({
+    url: '/Account',
+    methods: 'get'
+  })
+}

@@ -1,4 +1,5 @@
-import { getToken, removeToken } from '@/utils/token'
+import { getToken } from '@/utils/token'
+import store from '@/store'
 
 const service = function (options) {
   return new Promise((resolve, reject) => {
@@ -20,8 +21,8 @@ const service = function (options) {
       success: resolve,
       fail: function (error) {
         if (error.status === 401) {
-          removeToken()
-          wx.navigateTo({url: 'pages/index/main'})
+          store.dispatch('clearUserInfo')
+          wx.navigateTo({url: '/pages/index/main'})
         }
 
         reject(error)

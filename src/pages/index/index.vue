@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <i-button open-type="getUserInfo" type="success" @getuserinfo="getUserInfo">登 录</i-button>
+    <i-button open-type="getUserInfo" type="success" @getuserinfo="getUserInfo" v-if="!token">登 录</i-button>
     <i-toast id="toast"/>
   </div>
 </template>
@@ -8,7 +8,6 @@
 <script>
 import card from '@/components/card'
 import { mapGetters } from 'vuex'
-import { getToken } from '@/utils/token'
 
 const {$Toast} = require('../../../static/iview/base/index')
 
@@ -18,6 +17,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'token',
       'nickName',
       'avatar'
     ])
@@ -61,7 +61,7 @@ export default {
 
       that.$store.dispatch('getOrders').then((orders) => {
         wx.navigateTo({
-          url: 'pages/live/main?orderId=' + orders[0].orderId
+          url: '/pages/live/main?orderId=' + orders[0].orderId
         })
       }).catch(() => {
         $Toast({
@@ -72,7 +72,7 @@ export default {
     }
   },
   onReady () {
-    if (getToken()) {
+    if (this.token) {
       this.navigateToRoom()
     }
   }
