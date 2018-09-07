@@ -29,7 +29,9 @@ export default {
     getUserInfo (e) {
       const that = this
 
-      if (e.mp.detail.errMsg === 'getUserInfo:fail auth deny') {
+      console.log(e.mp.detail.errMsg)
+
+      if (e.mp.detail.errMsg.indexOf('deny') > -1) {
         return $Toast({
           content: '登录失败，请重新登录',
           type: 'warning'
@@ -43,6 +45,8 @@ export default {
               code: res.code,
               encryptedData: e.mp.detail.encryptedData,
               iv: e.mp.detail.iv
+            }).then(() => {
+              return that.$store.dispatch('getMyInfo')
             }).then(() => {
               this.navigateToRoom()
             })

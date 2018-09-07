@@ -18,13 +18,10 @@ const actions = {
     return signIn(data).then(res => {
       setToken(res.data.token)
       commit('setToken', res.data.token)
-      commit('setAvatar', res.data.user.avatarUrl)
-      commit('setNickName', res.data.user.nickName)
     })
   },
-  getMyInfo ({commit}, token) {
+  getMyInfo ({commit}) {
     return getMyInfo().then(res => {
-      commit('setToken', token)
       commit('setAvatar', res.data.avatarUrl)
       commit('setNickName', res.data.nickName)
     })

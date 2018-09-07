@@ -6,7 +6,8 @@ export default {
   },
   onLaunch () {
     if (getToken()) {
-      this.$store.dispatch('getMyInfo', getToken())
+      this.$store.commit('setToken', getToken())
+      this.$store.dispatch('getMyInfo')
     }
   }
 }
