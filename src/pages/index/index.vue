@@ -1,6 +1,24 @@
 <template>
   <div class="container">
-    <i-button open-type="getUserInfo" type="success" @getuserinfo="getUserInfo" v-if="!token">登 录</i-button>
+    <i-button open-type="getUserInfo" type="success" @getuserinfo="getUserInfo" v-if="!token">获取订单</i-button>
+    <scroll-view scroll-y>
+      <i-card :title="order.orderTypeName" extra="预设模式" class="card"
+              v-for="(order, index) in orders" :key="order.orderId">
+        <view slot="content">{{order.startTime}} - {{order.endTime}}</view>
+        <view slot="footer" class="card-footer">
+          <view class="footer-btn">
+            <i-button @click="shareSetting(order)" type="primary" size="large" long="true">
+              分享设置
+            </i-button>
+          </view>
+          <view class="footer-btn">
+            <i-button @click="enterSetting(order)" type="error" size="large" long="true">
+              进入设置
+            </i-button>
+          </view>
+        </view>
+      </i-card>
+    </scroll-view>
     <i-toast id="toast"/>
   </div>
 </template>
@@ -19,7 +37,8 @@ export default {
     ...mapGetters([
       'token',
       'nickName',
-      'avatar'
+      'avatar',
+      'orders'
     ])
   },
   components: {
@@ -28,8 +47,6 @@ export default {
   methods: {
     getUserInfo (e) {
       const that = this
-
-      console.log(e.mp.detail.errMsg)
 
       if (e.mp.detail.errMsg.indexOf('deny') > -1) {
         return $Toast({
@@ -48,7 +65,7 @@ export default {
             }).then(() => {
               return that.$store.dispatch('getMyInfo')
             }).then(() => {
-              this.navigateToRoom()
+              this.getOrders()
             })
           }
         },
@@ -60,29 +77,45 @@ export default {
         }
       })
     },
-    navigateToRoom () {
+    getOrders () {
       const that = this
 
       that.$store.dispatch('getOrders').then((orders) => {
-        wx.navigateTo({
-          url: '/pages/live/main?orderId=' + orders[0].orderId
-        })
+
       }).catch(() => {
         $Toast({
           content: '未发现订单',
           type: 'warning'
         })
       })
+    },
+    shareSetting () {
+
+    },
+    enterSetting (order) {
+      wx.navigateTo({
+        url: '/pages/live/main?orderId=' + order.orderId
+      })
     }
   },
   onReady () {
     if (this.token) {
-      this.navigateToRoom()
+      this.getOrders()
     }
   }
 }
 </script>
 
-<style scoped>
+<style type="scss" scoped>
+  .card {
+    width: 100%;
+  }
 
+  .card .card-footer {
+  }
+
+  .card .card-footer .footer-btn {
+    float: left;
+    width: 50%;
+  }
 </style>

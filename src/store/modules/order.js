@@ -1,3 +1,4 @@
+import { formatTime } from '@/utils/index'
 import { getOrders } from '@/api/order'
 
 const state = {
@@ -11,6 +12,11 @@ const getters = {
 const actions = {
   getOrders ({commit}) {
     return getOrders().then((response) => {
+      response.data.forEach(order => {
+        order.startTime = formatTime(order.startTime)
+        order.endTime = formatTime(order.endTime)
+      })
+
       commit('setOrders', response.data)
       return response.data
     })

@@ -1,11 +1,14 @@
 <template>
-  <div class="container">
-    <div class="userinfo">
-      <img class="userinfo-avatar" v-if="avatar" :src="avatar" background-size="cover"/>
-      <div class="userinfo-nickname">
-        <card :text="nickName"></card>
-      </div>
-    </div>
+  <div class="device-container">
+    <view class="menu-wrapper">
+      <scroll-view scroll-y="true" :style="{height: panelHeight}">
+        <view v-for="(menu, index) in menus" :key="menu.name" class="menu-item border-1px" @click="selectMenu">
+          <view class="text">
+            {{menu.name}}
+          </view>
+        </view>
+      </scroll-view>
+    </view>
   </div>
 </template>
 
@@ -15,7 +18,12 @@ import { mapGetters } from 'vuex'
 
 export default {
   data () {
-    return {}
+    return {
+      panelHeight: '',
+      menus: [{
+        name: '灯光'
+      }]
+    }
   },
   computed: {
     ...mapGetters([
@@ -28,27 +36,72 @@ export default {
   components: {
     card
   },
-  methods: {},
+  methods: {
+    selectMenu () {
+
+    }
+  },
   created () {
+    this.panelHeight = 1000
   }
 }
 </script>
 
 <style scoped>
-  .userinfo {
+  .device-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 46px;
+    overflow: hidden;
+    font-family: "微软雅黑";
   }
 
-  .userinfo-avatar {
-    width: 128px;
-    height: 128px;
-    margin: 20px;
-    border-radius: 50%;
+  .device-container .menu-wrapper {
+    flex: 0 0 80px;
+    width: 80px;
+    background: #f3f5f7;
   }
 
-  .userinfo-nickname {
-    color: #aaa;
+  .device-container .menu-wrapper .menu-item {
+    display: table;
+    width: 56px;
+    height: 54px;
+    line-height: 14px;
+    padding: 0 12px;
   }
+
+  .device-container .menu-wrapper .menu-item:current {
+    position: relative;
+    z-index: 10;
+    margin-top: -1px;
+    background: #fff;
+    font-weight: 700;
+  }
+
+  .device-container .menu-wrapper .menu-item:current .text {
+    border: none;
+  }
+
+  .device-container .menu-wrapper .menu-item .icon {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    vertical-align: top;
+    margin-right: 4px;
+    background-size: 12px 12px;
+    background-repeat: no-repeat;
+  }
+
+  .device-container .menu-wrapper .menu-item .text {
+    display: table-cell;
+    width: 56px;
+    vertical-align: middle;
+    position: relative;
+    font-size: 12px;
+    border-bottom: 1px solid rgba(7, 17, 27, 0.1);
+  }
+
+
 </style>

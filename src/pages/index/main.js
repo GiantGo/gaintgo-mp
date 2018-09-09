@@ -9,10 +9,8 @@ export default {
   config: {
     'usingComponents': {
       'i-button': '../../static/iview/button/index',
-      'i-drawer': '../../static/iview/drawer/index',
-      'i-action-sheet': '../../static/iview/action-sheet/index',
-      'i-message': '../../static/iview/message/index',
-      'i-toast': '../../static/iview/toast/index'
+      'i-toast': '../../static/iview/toast/index',
+      'i-card': '../../static/iview/card/index'
     }
   }
 }
