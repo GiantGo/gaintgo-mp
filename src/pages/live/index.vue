@@ -1,14 +1,17 @@
 <template>
   <div class="device-container">
     <view class="menu-wrapper">
-      <scroll-view scroll-y="true" :style="{height: panelHeight}">
-        <view v-for="(menu, index) in menus" :key="menu.name" class="menu-item border-1px" @click="selectMenu">
+      <scroll-view scroll-y="true">
+        <view v-for="(menu, index) in menus" :key="menu.name" v-if="!menu.disabled" class="menu-item"
+              :class="{active: menu.name === currentMenu}" @click="selectMenu(menu.name)">
           <view class="text">
             {{menu.name}}
           </view>
         </view>
       </scroll-view>
     </view>
+    <scroll-view scroll-y="true" class="setting-wrapper">
+    </scroll-view>
   </div>
 </template>
 
@@ -19,30 +22,32 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      panelHeight: '',
-      menus: [{
-        name: '灯光'
-      }]
+      currentMenu: '灯光'
     }
   },
   computed: {
     ...mapGetters([
-      'token',
-      'nickName',
-      'avatar',
-      'orders'
+      'menus'
     ])
   },
   components: {
     card
   },
   methods: {
-    selectMenu () {
-
+    selectMenu (name) {
+      this.currentMenu = name
     }
   },
-  created () {
-    this.panelHeight = 1000
+  onShow () {
+    const that = this
+
+    that.$store.dispatch('getMenus', {
+      orderId: this.$root.$mp.query.orderId
+    }).then(() => {
+      if (that.menus.length) {
+        that.currentMenu = that.menus[0].name
+      }
+    })
   }
 }
 </script>
@@ -53,9 +58,8 @@ export default {
     position: absolute;
     width: 100%;
     top: 0;
-    bottom: 46px;
+    bottom: 0;
     overflow: hidden;
-    font-family: "微软雅黑";
   }
 
   .device-container .menu-wrapper {
@@ -70,9 +74,10 @@ export default {
     height: 54px;
     line-height: 14px;
     padding: 0 12px;
+    border-bottom: 1px solid rgba(7, 17, 27, 0.1);
   }
 
-  .device-container .menu-wrapper .menu-item:current {
+  .device-container .menu-wrapper .menu-item.active {
     position: relative;
     z-index: 10;
     margin-top: -1px;
@@ -80,7 +85,7 @@ export default {
     font-weight: 700;
   }
 
-  .device-container .menu-wrapper .menu-item:current .text {
+  .device-container .menu-wrapper .menu-item.active .text {
     border: none;
   }
 
@@ -100,8 +105,9 @@ export default {
     vertical-align: middle;
     position: relative;
     font-size: 12px;
-    border-bottom: 1px solid rgba(7, 17, 27, 0.1);
   }
 
-
+  .device-container .setting-wrapper {
+    flex: 1;
+  }
 </style>

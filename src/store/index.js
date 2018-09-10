@@ -3,8 +3,7 @@ import Vuex from 'vuex'
 import * as getters from './getters'
 import * as actions from './actions'
 import user from './modules/user'
-import order from './modules/order'
-import device from './modules/device'
+import live from './modules/live'
 
 Vue.use(Vuex)
 
@@ -13,7 +12,6 @@ export default new Vuex.Store({
   actions,
   modules: {
     user,
-    order,
-    device
+    live
   }
 })
