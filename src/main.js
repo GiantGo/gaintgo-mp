@@ -20,9 +20,10 @@ export default {
     ],
     window: {
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+      navigationBarBackgroundColor: '#263238',
+      backgroundColor: '#263238',
+      navigationBarTitleText: '智慧酒店系统',
+      navigationBarTextStyle: 'white'
     }
   }
 }

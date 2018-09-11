@@ -1,23 +1,34 @@
 <template>
-  <div class="container">
-    <i-button open-type="getUserInfo" type="success" @getuserinfo="getUserInfo" v-if="!token">获取订单</i-button>
-    <scroll-view scroll-y>
-      <i-card :title="order.orderTypeName" extra="预设模式" class="card"
-              v-for="(order, index) in orders" :key="order.orderId">
-        <view slot="content">{{order.startTime}} - {{order.endTime}}</view>
-        <view slot="footer" class="card-footer">
-          <view class="footer-btn">
-            <i-button @click="shareSetting(order)" type="primary" size="large" long="true">
-              分享设置
-            </i-button>
-          </view>
-          <view class="footer-btn">
-            <i-button @click="enterSetting(order)" type="error" size="large" long="true">
-              进入设置
-            </i-button>
-          </view>
-        </view>
-      </i-card>
+  <div class="container index-container">
+    <div class="tips-container">
+      <div class="tip">
+        <span class="text">预设模式是您的房间还没分配之前的时候可以预先设置</span>
+      </div>
+      <div class="tip">
+        <span class="text">实时控制模式是您的房间已经分配之后可以实时控制房间</span>
+      </div>
+    </div>
+    <scroll-view scroll-y class="card-container">
+      <i-button open-type="getUserInfo" type="success" @getuserinfo="getUserInfo" v-if="!token">获取订单</i-button>
+      <div class="card" :title="order.orderTypeName"
+           v-for="(order, index) in orders" :key="order.orderId">
+        <div class="card-header">
+          <div class="card-header-content">
+            <div class="card-header-title">戴纳私逸酒店欢迎您</div>
+          </div>
+        </div>
+        <div class="card-body">
+          入住时间：{{order.startTime}} - {{order.endTime}}
+        </div>
+        <div class="card-footer">
+          <button @click="shareSetting(order)" class="footer-btn">
+            分享设置
+          </button>
+          <button @click="enterSetting(order)" class="footer-btn">
+            进入设置
+          </button>
+        </div>
+      </div>
     </scroll-view>
     <i-toast id="toast"/>
   </div>
@@ -107,15 +118,113 @@ export default {
 </script>
 
 <style type="scss" scoped>
+  .index-container {
+    flex-direction: column;
+  }
+
+  .tips-container {
+    height: 100px;
+    margin: 0 16px 0 16px;
+    font-size: 14px;
+    overflow: hidden;
+    background: #e8e8e8;
+    border: 1px solid #dddee1;
+  }
+
+  .card-container {
+    flex: 1;
+  }
+
   .card {
-    width: 100%;
+    margin: 10px 16px 0 16px;
+    font-size: 14px;
+    overflow: hidden;
+    position: relative;
+    background: #b7b7b7;
+    border: 1px solid #dddee1;
+    border-radius: 5px;
+    padding: 0;
   }
 
-  .card .card-footer {
+  .card-header {
+    display: flex;
+    padding: 6px 16px;
+    align-items: center
   }
 
-  .card .card-footer .footer-btn {
-    float: left;
+  .card-header-content {
+    flex: 1;
+    text-align: left
+  }
+
+  .card-header-title {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+    color: #1c2438
+  }
+
+  .card-header-extra {
+    flex: 1;
+    text-align: right;
+    font-size: 14px;
+    color: #80848f
+  }
+
+  .card-body {
+    position: relative;
+    padding: 6px 16px;
+    color: #495060;
+    font-size: 14px
+  }
+
+  .card-body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    transform: scale(.5);
+    transform-origin: 0 0;
+    pointer-events: none;
+    box-sizing: border-box;
+    border: 0 solid #e9eaec;
+  }
+
+  .card-footer {
+    display: flex;
+    position: relative;
+    color: #80848f;
+    font-size: 12px
+  }
+
+  .card-footer .footer-btn {
+    text-align: center;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+    font-size: 14px;
+    border: 0 !important;
+    position: relative;
+    text-decoration: none;
+    height: 44px;
+    line-height: 44px;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1);
+    background: #4a4142;
+    color: #c3b783;
     width: 50%;
   }
+
+  .card-footer .footer-btn:nth-of-type(1) {
+   border-bottom-left-radius: 5px;
+  }
+
+  .card-footer .footer-btn:nth-of-type(2) {
+    background: #352323;
+    border-bottom-right-radius: 5px;
+  }
+
 </style>

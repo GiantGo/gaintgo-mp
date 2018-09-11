@@ -1,5 +1,5 @@
 <template>
-  <div class="device-container">
+  <div class="container">
     <view class="menu-wrapper">
       <scroll-view scroll-y="true">
         <view v-for="(menu, index) in menus" :key="menu.name" v-if="!menu.disabled" class="menu-item"
@@ -53,22 +53,13 @@ export default {
 </script>
 
 <style scoped>
-  .device-container {
-    display: flex;
-    position: absolute;
-    width: 100%;
-    top: 0;
-    bottom: 0;
-    overflow: hidden;
-  }
-
-  .device-container .menu-wrapper {
+  .menu-wrapper {
     flex: 0 0 80px;
     width: 80px;
     background: #f3f5f7;
   }
 
-  .device-container .menu-wrapper .menu-item {
+  .menu-wrapper .menu-item {
     display: table;
     width: 56px;
     height: 54px;
@@ -77,7 +68,7 @@ export default {
     border-bottom: 1px solid rgba(7, 17, 27, 0.1);
   }
 
-  .device-container .menu-wrapper .menu-item.active {
+  .menu-wrapper .menu-item.active {
     position: relative;
     z-index: 10;
     margin-top: -1px;
@@ -85,11 +76,11 @@ export default {
     font-weight: 700;
   }
 
-  .device-container .menu-wrapper .menu-item.active .text {
+  .menu-wrapper .menu-item.active .text {
     border: none;
   }
 
-  .device-container .menu-wrapper .menu-item .icon {
+  .menu-wrapper .menu-item .icon {
     display: inline-block;
     width: 12px;
     height: 12px;
@@ -99,7 +90,7 @@ export default {
     background-repeat: no-repeat;
   }
 
-  .device-container .menu-wrapper .menu-item .text {
+  .menu-wrapper .menu-item .text {
     display: table-cell;
     width: 56px;
     vertical-align: middle;
@@ -107,7 +98,7 @@ export default {
     font-size: 12px;
   }
 
-  .device-container .setting-wrapper {
+  .setting-wrapper {
     flex: 1;
   }
 </style>

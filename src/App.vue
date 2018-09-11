@@ -15,12 +15,13 @@ export default {
 
 <style>
   .container {
-    height: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    box-sizing: border-box;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+    background-color: #263238;
   }
 
   /* this rule will be remove */
