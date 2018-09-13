@@ -1,6 +1,7 @@
 import { formatDate } from '@/utils/index'
 import { getOrder, getOrders } from '@/api/order'
 import { getRoomDevices } from '@/api/device'
+import { getPictureBox, getPictureBoxes, getDefaultPictureBoxes } from '@/api/picture'
 
 const aiMenu = {
   name: '智能控制'
@@ -13,31 +14,42 @@ const resetMenu = {
 }
 const deviceMenuMap = {
   '1': {
-    name: '灯光'
+    name: '灯光',
+    action: 'getLights'
   },
   '2': {
-    name: '音乐'
+    name: '音乐',
+    action: 'getMusics'
   },
   '3': {
-    name: '录音'
+    name: '录音',
+    action: 'getRecords'
   },
   '4': {
-    name: '画框'
+    name: '画框',
+    action: 'getPictureBoxes'
   },
   '5': {
-    name: '味道'
+    name: '味道',
+    action: 'getTastes'
   }
 }
 const state = {
   menus: [],
   devices: [],
-  orders: []
+  orders: [],
+  pictureBox: {},
+  pictureBoxes: [],
+  defaultPictureBoxes: []
 }
 
 const getters = {
   devices: state => state.devices,
   menus: state => state.menus,
-  orders: state => state.orders
+  orders: state => state.orders,
+  pictureBox: state => state.pictureBox,
+  pictureBoxes: state => state.pictureBoxes,
+  defaultPictureBoxes: state => state.defaultPictureBoxes
 }
 
 const actions = {
@@ -59,6 +71,21 @@ const actions = {
       commit('setOrders', response.data)
       return response.data
     })
+  },
+  getPictureBox ({commit}, pictureBoxId) {
+    return Promise.all([getPictureBox(pictureBoxId), getDefaultPictureBoxes()]).then((response) => {
+      commit('setPicturePicker', {
+        pictureBox: response[0].data,
+        defaultPictureBoxes: response[1].data
+      })
+      return response.data
+    })
+  },
+  getPictureBoxes ({commit}, orderId) {
+    return getPictureBoxes(orderId).then((response) => {
+      commit('setPictureBoxes', response.data)
+      return response.data
+    })
   }
 }
 
@@ -70,6 +97,8 @@ const mutations = {
     state.orders = orders
   },
   setMenus: (state, {orderInfo, devices}) => {
+    state.menus = []
+
     if (orderInfo.roomId) {
       state.menus.push(aiMenu)
     }
@@ -82,6 +111,23 @@ const mutations = {
       state.menus.push(authorizeMenu)
       state.menus.push(resetMenu)
     }
+  },
+  setPictureBoxes: (state, pictureBoxes) => {
+    pictureBoxes.forEach(picture => {
+      if (picture.property.width) {
+        picture.property.width = (picture.property.width / 20) + 'px'
+      }
+
+      if (picture.property.height) {
+        picture.property.height = (picture.property.height / 20) + 'px'
+      }
+    })
+
+    state.pictureBoxes = pictureBoxes
+  },
+  setPicturePicker: (state, {pictureBox, defaultPictureBoxes}) => {
+    state.pictureBox = pictureBox
+    state.defaultPictureBoxes = defaultPictureBoxes
   }
 }
 

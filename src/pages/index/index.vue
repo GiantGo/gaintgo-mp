@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import card from '@/components/card'
 import { mapGetters } from 'vuex'
 
 const {$Toast} = require('../../../static/iview/base/index')
@@ -52,9 +51,7 @@ export default {
       'orders'
     ])
   },
-  components: {
-    card
-  },
+  components: {},
   methods: {
     getUserInfo (e) {
       const that = this
@@ -105,7 +102,7 @@ export default {
     },
     enterSetting (order) {
       wx.navigateTo({
-        url: '/pages/live/main?orderId=' + order.orderId
+        url: '/pages/setting/main?orderId=' + order.orderId
       })
     }
   },
@@ -219,7 +216,7 @@ export default {
   }
 
   .card-footer .footer-btn:nth-of-type(1) {
-   border-bottom-left-radius: 5px;
+    border-bottom-left-radius: 5px;
   }
 
   .card-footer .footer-btn:nth-of-type(2) {
