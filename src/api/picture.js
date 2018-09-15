@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import upload from '@/utils/upload'
 
 // 读取当前订单下所有的画框(含空间代码屏)
 export function getPictureBox (pictureBoxId) {
@@ -24,5 +25,14 @@ export function getDefaultPictureBoxes () {
   return request({
     url: '/PictureBox/piclist',
     methods: 'get'
+  })
+}
+
+// 上传画框图片
+export function uploadPicture (filePath) {
+  return upload({
+    url: '/PictureBox',
+    methods: 'post',
+    filePath: filePath
   })
 }

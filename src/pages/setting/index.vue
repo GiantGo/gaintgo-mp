@@ -14,12 +14,16 @@
       <view v-show="currentMenu === '画框'">
         <picture-box></picture-box>
       </view>
+      <view v-show="currentMenu === '音乐'">
+        <music-list></music-list>
+      </view>
     </scroll-view>
   </div>
 </template>
 
 <script>
 import pictureBox from '@/components/pictureBox'
+import musicList from '@/components/musicList'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -31,18 +35,20 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'menus'
+      'menus',
+      'defaultPictureBoxes'
     ])
   },
   components: {
-    pictureBox
+    pictureBox,
+    musicList
   },
   methods: {
     selectMenu (menu) {
       this.currentMenu = menu.name
 
       if (menu.action) {
-        this.$store.dispatch(menu.action, this.orderId)
+        this.$store.dispatch(menu.action, Object.assign({orderId: this.orderId}, menu.actionData))
       }
     }
   },
