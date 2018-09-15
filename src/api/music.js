@@ -10,7 +10,7 @@ export function getMusics (options) {
 }
 
 // 获取音乐播放地址
-export function getMusicUrl (musicId) {
+export function getMusicSrc (musicId) {
   return request({
     url: '/Music/mp3url',
     methods: 'get',

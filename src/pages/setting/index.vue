@@ -54,14 +54,15 @@ export default {
   },
   onShow () {
     const that = this
+    const query = this.$root.$mp.query
 
-    that.orderId = this.$root.$mp.query.orderId
+    that.orderId = query.orderId
 
-    that.$store.dispatch('getMenus', {
+    that.$store.dispatch('getOrder', {
       orderId: that.orderId
     }).then(() => {
       if (that.menus.length) {
-        that.currentMenu = that.menus[0].name
+        that.currentMenu = query.menuName ? query.menuName : that.menus[0].name
       }
     })
   }

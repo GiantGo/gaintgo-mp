@@ -2,7 +2,7 @@ import { formatDate } from '@/utils/index'
 import { getOrder, getOrders } from '@/api/order'
 import { getRoomDevices } from '@/api/device'
 import { getPictureBox, getPictureBoxes, getDefaultPictureBoxes, uploadPicture } from '@/api/picture'
-import { getMusics } from '@/api/music'
+import { getMusics, getMusicSrc } from '@/api/music'
 
 const aiMenu = {
   name: '智能控制'
@@ -20,12 +20,7 @@ const deviceMenuMap = {
   },
   '2': {
     name: '音乐',
-    action: 'getMusics',
-    actionData: {
-      keyword: '逆流成河',
-      page: 1,
-      pageSize: 10
-    }
+    action: 'getMusics'
   },
   '3': {
     name: '录音',
@@ -43,28 +38,28 @@ const deviceMenuMap = {
 const state = {
   menus: [],
   devices: [],
+  order: [],
   orders: [],
   pictureBox: {},
   pictureBoxes: [],
   defaultPictureBoxes: [],
-  customPictureBox: [],
-  musics: []
+  customPictureBox: []
 }
 
 const getters = {
   devices: state => state.devices,
   menus: state => state.menus,
+  order: state => state.order,
   orders: state => state.orders,
   pictureBox: state => state.pictureBox,
   pictureBoxes: state => state.pictureBoxes,
-  defaultPictureBoxes: state => state.defaultPictureBoxes,
-  musics: state => state.musics
+  defaultPictureBoxes: state => state.defaultPictureBoxes
 }
 
 const actions = {
-  getMenus ({commit}, {orderId}) {
+  getOrder ({commit}, {orderId}) {
     return Promise.all([getOrder(orderId), getRoomDevices(orderId)]).then((response) => {
-      commit('setMenus', {
+      commit('setOrder', {
         orderInfo: response[0].data,
         devices: response[1].data
       })
@@ -102,12 +97,11 @@ const actions = {
       commit('addCustomPicture', response.data)
     })
   },
-  getMusics ({commit}, options) {
-    return getMusics(options).then(response => {
-      if (response.data) {
-        commit('setMusics', response.data)
-      }
-    })
+  getMusics ({commit, state}, options) {
+    return getMusics(options)
+  },
+  getMusicSrc ({commit}, music) {
+    return getMusicSrc(music.id)
   }
 }
 
@@ -118,7 +112,9 @@ const mutations = {
   setOrders: (state, orders) => {
     state.orders = orders
   },
-  setMenus: (state, {orderInfo, devices}) => {
+  setOrder: (state, {orderInfo, devices}) => {
+    state.order = Object.assign({}, orderInfo, {isPreSetting: !orderInfo.roomId})
+    state.devices = devices
     state.menus = []
 
     if (orderInfo.roomId) {
@@ -160,9 +156,6 @@ const mutations = {
   addCustomPicture (state, picture) {
     state.customPictureBox.files.push(JSON.parse(picture))
     console.log(state.defaultPictureBoxes)
-  },
-  setMusics (state, musics) {
-    state.musics = musics
   }
 }
 
