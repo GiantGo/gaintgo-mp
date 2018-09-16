@@ -74,6 +74,11 @@ export default {
               return that.$store.dispatch('getMyInfo')
             }).then(() => {
               this.getOrders()
+            }).catch(() => {
+              $Toast({
+                content: '登录失败，请重新登录',
+                type: 'warning'
+              })
             })
           }
         },
@@ -101,6 +106,7 @@ export default {
 
     },
     enterSetting (order) {
+      this.$socket.emit('joinroom', order.orderId)
       wx.navigateTo({
         url: '/pages/setting/main?orderId=' + order.orderId
       })

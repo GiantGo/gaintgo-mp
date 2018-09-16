@@ -17,13 +17,18 @@
       <view v-show="currentMenu === '音乐'">
         <music-list></music-list>
       </view>
+      <view v-show="currentMenu === '录音'">
+        <record></record>
+      </view>
     </scroll-view>
+    <i-toast id="toast"/>
   </div>
 </template>
 
 <script>
 import pictureBox from '@/components/pictureBox'
 import musicList from '@/components/musicList'
+import record from '@/components/record'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -35,13 +40,13 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'menus',
-      'defaultPictureBoxes'
+      'menus'
     ])
   },
   components: {
     pictureBox,
-    musicList
+    musicList,
+    record
   },
   methods: {
     selectMenu (menu) {
@@ -62,7 +67,7 @@ export default {
       orderId: that.orderId
     }).then(() => {
       if (that.menus.length) {
-        that.currentMenu = query.menuName ? query.menuName : that.menus[0].name
+        that.selectMenu(that.menus[0])
       }
     })
   }

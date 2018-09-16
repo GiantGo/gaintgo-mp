@@ -29,10 +29,22 @@ export function getDefaultPictureBoxes () {
 }
 
 // 上传画框图片
-export function uploadPicture (filePath) {
+export function uploadPicture (filePath, orderId) {
   return upload({
     url: '/PictureBox',
     methods: 'post',
-    filePath: filePath
+    filePath: filePath,
+    data: {
+      orderId: orderId
+    }
+  })
+}
+
+// 获取默认画框列表
+export function savePictureBox (pictureBox) {
+  return request({
+    url: '/PictureBox',
+    methods: 'put',
+    data: pictureBox
   })
 }

@@ -18,6 +18,7 @@ const actions = {
     return signIn(data).then(res => {
       setToken(res.data.token)
       commit('setToken', res.data.token)
+      console.log(res)
     })
   },
   getMyInfo ({commit}) {

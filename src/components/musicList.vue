@@ -9,7 +9,6 @@
         {{(currentMusic.id === music.id && !currentMusic.paused) ? '暂停' : '播放'}}
       </button>
     </div>
-    <i-toast id="toast"/>
   </div>
 </template>
 
@@ -58,7 +57,8 @@ export default {
       const that = this
 
       if (!music.src) {
-        this.$store.dispatch('getMusicSrc', music).then(() => {
+        this.$store.dispatch('getMusicSrc', music).then(response => {
+          music.src = response.data
           that.play(music)
         }).catch(() => {
           $Toast({

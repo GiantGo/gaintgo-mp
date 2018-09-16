@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <view class="menu-wrapper">
+    <div class="menu-wrapper">
       <scroll-view scroll-y="true">
         <view v-for="(group, index) in defaultPictureBoxes" :key="group.tagName" class="menu-item"
               :class="{active: group.tagName === currentMenu}" @click="selectMenu(group)">
@@ -9,14 +9,18 @@
           </view>
         </view>
       </scroll-view>
-    </view>
+    </div>
     <scroll-view scroll-y="true" class="setting-wrapper">
-      <view v-for="(file, index) in files" :key="file.fileUrl">
-        <img :src="file.fileUrl"/>
-      </view>
-      <view v-show="currentMenu === '自定义'">
+      <div v-for="(file, index) in files" :key="file.fileUrl">
+        <div @click="toggleFile(file)">
+          {{file.checked}}
+          <img :src="file.fileUrl"/>
+        </div>
+      </div>
+      <div v-show="currentMenu === '自定义'">
         <button @click="uploadFile">上传</button>
-      </view>
+      </div>
+      <button @click="savePictureBox">保存</button>
     </scroll-view>
   </div>
 </template>
@@ -27,14 +31,16 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      pictureBoxId: '',
+      pictureBox: {},
+      defaultPictureBoxes: [],
+      customPictureBox: {},
       currentMenu: '',
       files: []
     }
   },
   computed: {
     ...mapGetters([
-      'defaultPictureBoxes'
+      'order'
     ])
   },
   components: {},
@@ -51,20 +57,53 @@ export default {
         success: function (res) {
           const tempFilePaths = res.tempFilePaths
 
-          that.$store.dispatch('uploadPicture', tempFilePaths[0])
+          that.$store.dispatch('uploadPicture', {
+            filePath: tempFilePaths[0],
+            orderId: that.order.orderId
+          }).then(response => {
+            that.customPictureBox.files.push(JSON.parse(response.data))
+          })
         }
       })
+    },
+    toggleFile (file) {
+      file.checked = !file.checked
+    },
+    savePictureBox () {
+      const that = this
+      let imagesUrl = []
+
+      that.defaultPictureBoxes.forEach(pictureBox => {
+        pictureBox.files.forEach(file => {
+          if (file.checked) {
+            imagesUrl.push(file.fileUrl)
+          }
+        })
+      })
+
+      that.$store.dispatch('savePictureBox', Object.assign({}, that.pictureBox, {imagesUrl: imagesUrl}))
     }
   },
   onShow () {
     const that = this
+    const query = this.$root.$mp.query
 
-    that.pictureBoxId = this.$root.$mp.query.pictureBoxId
+    that.$store.dispatch('getPictureBox', query.pictureBoxId).then((response) => {
+      that.pictureBox = response[0].data
+      that.defaultPictureBoxes = response[1].data
 
-    that.$store.dispatch('getPictureBox', that.pictureBoxId).then(() => {
       if (that.defaultPictureBoxes && that.defaultPictureBoxes.length) {
-        that.currentMenu = that.defaultPictureBoxes[0].tagName
-        that.files = that.defaultPictureBoxes[0].files
+        that.defaultPictureBoxes.forEach(pictureBox => {
+          if (pictureBox.tagName === '自定义') {
+            that.customPictureBox = pictureBox
+          }
+
+          pictureBox.files.forEach(file => {
+            file.checked = that.pictureBox.imagesUrl.indexOf(file.fileUrl) > -1
+          })
+        })
+
+        that.selectMenu(that.defaultPictureBoxes[0])
       }
     })
   }

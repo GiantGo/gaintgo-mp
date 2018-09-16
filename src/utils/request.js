@@ -25,7 +25,9 @@ const service = function (options) {
           wx.navigateTo({url: '/pages/index/main'})
         }
 
-        reject(error)
+        console.log(error)
+
+        reject(arguments)
       }
     })
   })

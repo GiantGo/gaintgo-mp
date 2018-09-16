@@ -2,8 +2,11 @@ import Vue from 'vue'
 import App from './App'
 import store from '@/store'
 
+import socket from '@/utils/socket'
+
 Vue.config.productionTip = false
 Vue.prototype.$store = store
+Vue.prototype.$socket = socket
 App.mpType = 'app'
 
 const app = new Vue(App)

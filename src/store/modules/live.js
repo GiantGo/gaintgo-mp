@@ -1,8 +1,9 @@
 import { formatDate } from '@/utils/index'
 import { getOrder, getOrders } from '@/api/order'
 import { getRoomDevices } from '@/api/device'
-import { getPictureBox, getPictureBoxes, getDefaultPictureBoxes, uploadPicture } from '@/api/picture'
+import { getPictureBox, getPictureBoxes, getDefaultPictureBoxes, uploadPicture, savePictureBox } from '@/api/picture'
 import { getMusics, getMusicSrc } from '@/api/music'
+import { getRecord, uploadRecord } from '@/api/record'
 
 const aiMenu = {
   name: '智能控制'
@@ -24,7 +25,7 @@ const deviceMenuMap = {
   },
   '3': {
     name: '录音',
-    action: 'getRecords'
+    action: 'getRecord'
   },
   '4': {
     name: '画框',
@@ -40,10 +41,8 @@ const state = {
   devices: [],
   order: [],
   orders: [],
-  pictureBox: {},
   pictureBoxes: [],
-  defaultPictureBoxes: [],
-  customPictureBox: []
+  record: ''
 }
 
 const getters = {
@@ -51,9 +50,8 @@ const getters = {
   menus: state => state.menus,
   order: state => state.order,
   orders: state => state.orders,
-  pictureBox: state => state.pictureBox,
   pictureBoxes: state => state.pictureBoxes,
-  defaultPictureBoxes: state => state.defaultPictureBoxes
+  record: state => state.record
 }
 
 const actions = {
@@ -77,14 +75,7 @@ const actions = {
     })
   },
   getPictureBox ({commit}, pictureBoxId) {
-    return Promise.all([getPictureBox(pictureBoxId), getDefaultPictureBoxes()]).then((response) => {
-      const result = {
-        pictureBox: response[0].data,
-        defaultPictureBoxes: response[1].data
-      }
-      commit('setPicturePicker', result)
-      return result
-    })
+    return Promise.all([getPictureBox(pictureBoxId), getDefaultPictureBoxes()])
   },
   getPictureBoxes ({commit}, {orderId}) {
     return getPictureBoxes(orderId).then((response) => {
@@ -92,16 +83,25 @@ const actions = {
       return response.data
     })
   },
-  uploadPicture ({commit}, filePath) {
-    return uploadPicture(filePath).then(response => {
-      commit('addCustomPicture', response.data)
-    })
+  savePictureBox ({commit}, pictureBox) {
+    return savePictureBox(pictureBox)
+  },
+  uploadPicture ({commit}, {filePath, orderId}) {
+    return uploadPicture(filePath, orderId)
+  },
+  uploadRecord ({commit}, {filePath, orderId}) {
+    return uploadRecord(filePath, orderId)
   },
   getMusics ({commit, state}, options) {
     return getMusics(options)
   },
   getMusicSrc ({commit}, music) {
     return getMusicSrc(music.id)
+  },
+  getRecord ({commit}, {orderId}) {
+    return getRecord(orderId).then(response => {
+      commit('setRecord', response.data)
+    })
   }
 }
 
@@ -143,19 +143,8 @@ const mutations = {
 
     state.pictureBoxes = pictureBoxes
   },
-  setPicturePicker: (state, {pictureBox, defaultPictureBoxes}) => {
-    state.pictureBox = pictureBox
-    state.defaultPictureBoxes = defaultPictureBoxes
-
-    state.defaultPictureBoxes.forEach(picture => {
-      if (picture.tagName === '自定义') {
-        state.customPictureBox = picture
-      }
-    })
-  },
-  addCustomPicture (state, picture) {
-    state.customPictureBox.files.push(JSON.parse(picture))
-    console.log(state.defaultPictureBoxes)
+  setRecord (state, record) {
+    state.record = record
   }
 }
 
