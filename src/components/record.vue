@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="currentMenu === '录音'">
     <button @click="play">
       播放
     </button>
@@ -23,6 +23,7 @@ const {$Toast} = require('../../static/iview/base/index')
 export default {
   data () {
     return {
+      record: {},
       recorderManager: '',
       recordStatus: {
         recording: false,
@@ -33,11 +34,25 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'record',
-      'order'
+      'order',
+      'currentMenu'
     ])
   },
+  watch: {
+    currentMenu (menuName) {
+      if (menuName === '录音') {
+        this.getRecord()
+      }
+    }
+  },
   methods: {
+    getRecord () {
+      const that = this
+
+      that.$store.dispatch('getRecord', that.order.orderId).then(response => {
+        that.record = response.data
+      })
+    },
     start () {
       const that = this
 

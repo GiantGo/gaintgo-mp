@@ -16,45 +16,41 @@ const resetMenu = {
 }
 const deviceMenuMap = {
   '1': {
-    name: '灯光',
-    action: 'getLights'
+    name: '灯光'
   },
   '2': {
-    name: '音乐',
-    action: 'getMusics'
+    name: '音乐'
   },
   '3': {
-    name: '录音',
-    action: 'getRecord'
+    name: '录音'
   },
   '4': {
-    name: '画框',
-    action: 'getPictureBoxes'
+    name: '画框'
   },
   '5': {
-    name: '味道',
-    action: 'getTastes'
+    name: '味道'
   }
 }
 const state = {
   menus: [],
+  currentMenu: '',
   devices: [],
   order: [],
-  orders: [],
-  pictureBoxes: [],
-  record: ''
+  orders: []
 }
 
 const getters = {
-  devices: state => state.devices,
   menus: state => state.menus,
+  currentMenu: state => state.currentMenu,
+  devices: state => state.devices,
   order: state => state.order,
-  orders: state => state.orders,
-  pictureBoxes: state => state.pictureBoxes,
-  record: state => state.record
+  orders: state => state.orders
 }
 
 const actions = {
+  selectMenu ({commit}, menu) {
+    commit('setCurrentMenu', menu)
+  },
   getOrder ({commit}, {orderId}) {
     return Promise.all([getOrder(orderId), getRoomDevices(orderId)]).then((response) => {
       commit('setOrder', {
@@ -77,11 +73,8 @@ const actions = {
   getPictureBox ({commit}, pictureBoxId) {
     return Promise.all([getPictureBox(pictureBoxId), getDefaultPictureBoxes()])
   },
-  getPictureBoxes ({commit}, {orderId}) {
-    return getPictureBoxes(orderId).then((response) => {
-      commit('setPictureBoxes', response.data)
-      return response.data
-    })
+  getPictureBoxes ({commit}, orderId) {
+    return getPictureBoxes(orderId)
   },
   savePictureBox ({commit}, pictureBox) {
     return savePictureBox(pictureBox)
@@ -98,14 +91,15 @@ const actions = {
   getMusicSrc ({commit}, music) {
     return getMusicSrc(music.id)
   },
-  getRecord ({commit}, {orderId}) {
-    return getRecord(orderId).then(response => {
-      commit('setRecord', response.data)
-    })
+  getRecord ({commit}, orderId) {
+    return getRecord(orderId)
   }
 }
 
 const mutations = {
+  setCurrentMenu: (state, menu) => {
+    state.currentMenu = menu.name
+  },
   setDevices: (state, devices) => {
     state.devices = devices
   },
@@ -129,22 +123,10 @@ const mutations = {
       state.menus.push(authorizeMenu)
       state.menus.push(resetMenu)
     }
-  },
-  setPictureBoxes: (state, pictureBoxes) => {
-    pictureBoxes.forEach(picture => {
-      if (picture.property.width) {
-        picture.property.width = (picture.property.width / 20) + 'px'
-      }
 
-      if (picture.property.height) {
-        picture.property.height = (picture.property.height / 20) + 'px'
-      }
-    })
-
-    state.pictureBoxes = pictureBoxes
-  },
-  setRecord (state, record) {
-    state.record = record
+    if (!state.currentMenu && state.menus.length) {
+      state.currentMenu = state.menus[0].name
+    }
   }
 }
 

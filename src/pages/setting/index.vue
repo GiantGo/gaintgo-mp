@@ -11,15 +11,9 @@
       </scroll-view>
     </view>
     <scroll-view scroll-y="true" class="setting-wrapper">
-      <view v-show="currentMenu === '画框'">
-        <picture-box></picture-box>
-      </view>
-      <view v-show="currentMenu === '音乐'">
-        <music-list></music-list>
-      </view>
-      <view v-show="currentMenu === '录音'">
-        <record></record>
-      </view>
+      <picture-box></picture-box>
+      <music-list></music-list>
+      <record></record>
     </scroll-view>
     <i-toast id="toast"/>
   </div>
@@ -34,13 +28,13 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      orderId: '',
-      currentMenu: '灯光'
+      orderId: ''
     }
   },
   computed: {
     ...mapGetters([
-      'menus'
+      'menus',
+      'currentMenu'
     ])
   },
   components: {
@@ -50,7 +44,8 @@ export default {
   },
   methods: {
     selectMenu (menu) {
-      this.currentMenu = menu.name
+      this.$store.dispatch('selectMenu', menu)
+      this.$emit('show', menu.name)
 
       if (menu.action) {
         this.$store.dispatch(menu.action, Object.assign({orderId: this.orderId}, menu.actionData))
@@ -65,10 +60,6 @@ export default {
 
     that.$store.dispatch('getOrder', {
       orderId: that.orderId
-    }).then(() => {
-      if (that.menus.length) {
-        that.selectMenu(that.menus[0])
-      }
     })
   }
 }

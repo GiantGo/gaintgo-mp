@@ -1,5 +1,5 @@
 <template>
-  <div class="music-container">
+  <div class="music-container" v-show="currentMenu === '音乐'">
     <input placeholder="请输入歌曲名称" auto-focus v-model="keywords"/>
     <button @click="searchMusic">搜索</button>
     <div class="music" v-for="(music, index) in musicPager.rows" :key="music.id">
@@ -36,8 +36,16 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'order'
+      'order',
+      'currentMenu'
     ])
+  },
+  watch: {
+    currentMenu (menuName) {
+      if (menuName === '音乐') {
+        this.searchMusic()
+      }
+    }
   },
   methods: {
     searchMusic () {
@@ -47,7 +55,8 @@ export default {
         keywords: that.keywords,
         isPreSetting: that.order.isPreSetting,
         page: that.musicPager.page,
-        pageSize: that.musicPager.pageSize
+        pageSize: that.musicPager.pageSize,
+        orderId: that.order.orderId
       }).then(response => {
         that.musicPager.rows = response.data.rows
         that.musicPager.total = response.data.total
@@ -101,6 +110,11 @@ export default {
     navigateToPicker (pictureBoxId) {
       wx.navigateTo({url: '/pages/musicPicker/main?pictureBoxId=' + pictureBoxId})
     }
+  },
+  created () {
+    this.$on('show', (name) => {
+      console.log(name)
+    })
   }
 }
 </script>
