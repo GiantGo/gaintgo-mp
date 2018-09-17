@@ -21,7 +21,7 @@ export default {
     top: 0;
     bottom: 0;
     overflow: hidden;
-    background-color: #263238;
+    background-color: #e9e3e1;
   }
 
   /* this rule will be remove */
@@ -30,6 +30,14 @@ export default {
     -moz-transition: width 2s;
     -webkit-transition: width 2s;
     -o-transition: width 2s;
+  }
+
+  button::after {
+    border-radius: 0;
+  }
+
+  button {
+    border-radius: 0;
   }
 
   .menu-wrapper {

@@ -35,16 +35,14 @@ const state = {
   menus: [],
   currentMenu: '',
   devices: [],
-  order: [],
-  orders: []
+  order: []
 }
 
 const getters = {
   menus: state => state.menus,
   currentMenu: state => state.currentMenu,
   devices: state => state.devices,
-  order: state => state.order,
-  orders: state => state.orders
+  order: state => state.order
 }
 
 const actions = {
@@ -66,7 +64,6 @@ const actions = {
         order.endTime = formatDate(order.endTime)
       })
 
-      commit('setOrders', response.data)
       return response.data
     })
   },
@@ -102,9 +99,6 @@ const mutations = {
   },
   setDevices: (state, devices) => {
     state.devices = devices
-  },
-  setOrders: (state, orders) => {
-    state.orders = orders
   },
   setOrder: (state, {orderInfo, devices}) => {
     state.order = Object.assign({}, orderInfo, {isPreSetting: !orderInfo.roomId})

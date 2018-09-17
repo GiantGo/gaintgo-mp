@@ -23,10 +23,10 @@ export default {
     ],
     window: {
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#263238',
+      navigationBarBackgroundColor: '#e9e3e1',
       backgroundColor: '#263238',
       navigationBarTitleText: '智慧酒店系统',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'black'
     }
   }
 }

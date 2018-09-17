@@ -1,31 +1,36 @@
 <template>
   <div class="container index-container">
-    <div class="tips-container">
-      <div class="tip">
-        <span class="text">预设模式是您的房间还没分配之前的时候可以预先设置</span>
-      </div>
-      <div class="tip">
-        <span class="text">实时控制模式是您的房间已经分配之后可以实时控制房间</span>
-      </div>
-    </div>
     <scroll-view scroll-y class="card-container">
       <i-button open-type="getUserInfo" type="success" @getuserinfo="getUserInfo" v-if="!token">获取订单</i-button>
+      <div class="tips-container">
+        <div class="tip">
+          <span class="text">预设模式是您的房间还没分配之前的时候可以预先设置</span>
+        </div>
+        <div class="tip">
+          <span class="text">实时控制模式是您的房间已经分配之后可以实时控制房间</span>
+        </div>
+      </div>
       <div class="card" :title="order.orderTypeName"
            v-for="(order, index) in orders" :key="order.orderId">
         <div class="card-header">
-          <div class="card-header-content">
-            <div class="card-header-title">戴纳私逸酒店欢迎您</div>
+          <div class="card-header-title">
+            戴纳私逸酒店欢迎您
           </div>
         </div>
         <div class="card-body">
-          入住时间：{{order.startTime}} - {{order.endTime}}
+          <div class="order-date">
+            入住时间：{{order.startTime}} - {{order.endTime}}
+          </div>
+          <div class="room-number">
+            空间号码：2018
+          </div>
         </div>
         <div class="card-footer">
           <button @click="shareSetting(order)" class="footer-btn">
-            分享设置
+            场景预设
           </button>
           <button @click="enterSetting(order)" class="footer-btn">
-            进入设置
+            实时控制
           </button>
         </div>
       </div>
@@ -41,14 +46,15 @@ const {$Toast} = require('../../../static/iview/base/index')
 
 export default {
   data () {
-    return {}
+    return {
+      orders: []
+    }
   },
   computed: {
     ...mapGetters([
       'token',
       'nickName',
-      'avatar',
-      'orders'
+      'avatar'
     ])
   },
   components: {},
@@ -94,7 +100,7 @@ export default {
       const that = this
 
       that.$store.dispatch('getOrders').then((orders) => {
-
+        that.orders = orders
       }).catch(() => {
         $Toast({
           content: '未发现订单',
@@ -120,18 +126,26 @@ export default {
 }
 </script>
 
-<style type="scss" scoped>
+<style scoped>
   .index-container {
     flex-direction: column;
   }
 
   .tips-container {
+    display: flex;
+    flex-direction: column;
     height: 100px;
-    margin: 0 16px 0 16px;
+    margin: 10px 25px 0 25px;
     font-size: 14px;
     overflow: hidden;
     background: #e8e8e8;
     border: 1px solid #dddee1;
+    box-shadow: -2px 0 10px #d4d2d1, 0 -2px 10px #d4d2d1, 2px 0 10px #d4d2d1;
+  }
+
+  .tips-container .tip {
+    flex: 1;
+    padding: 8px 10px 0 10px;
   }
 
   .card-container {
@@ -139,25 +153,20 @@ export default {
   }
 
   .card {
-    margin: 10px 16px 0 16px;
+    position: relative;
+    margin: 10px 25px 0 25px;
+    padding: 0;
+    height: 130px;
     font-size: 14px;
     overflow: hidden;
-    position: relative;
-    background: #b7b7b7;
+    background: #e5e5e5;
     border: 1px solid #dddee1;
     border-radius: 5px;
-    padding: 0;
   }
 
   .card-header {
-    display: flex;
     padding: 6px 16px;
-    align-items: center
-  }
-
-  .card-header-content {
-    flex: 1;
-    text-align: left
+    align-items: center;
   }
 
   .card-header-title {
@@ -165,13 +174,6 @@ export default {
     vertical-align: middle;
     font-size: 14px;
     color: #1c2438
-  }
-
-  .card-header-extra {
-    flex: 1;
-    text-align: right;
-    font-size: 14px;
-    color: #80848f
   }
 
   .card-body {
@@ -196,13 +198,15 @@ export default {
   }
 
   .card-footer {
-    display: flex;
-    position: relative;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
     color: #80848f;
-    font-size: 12px
+    font-size: 12px;
   }
 
   .card-footer .footer-btn {
+    float: left;
     text-align: center;
     vertical-align: middle;
     touch-action: manipulation;
@@ -216,18 +220,22 @@ export default {
     height: 44px;
     line-height: 44px;
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1);
-    background: #4a4142;
-    color: #c3b783;
+    color: #eae3e1;
     width: 50%;
   }
 
   .card-footer .footer-btn:nth-of-type(1) {
+    background: #a5897e;
     border-bottom-left-radius: 5px;
   }
 
   .card-footer .footer-btn:nth-of-type(2) {
-    background: #352323;
+    background: #574640;
     border-bottom-right-radius: 5px;
+  }
+
+  .card-footer .footer-btn.disabled {
+    background: #898989;
   }
 
 </style>
