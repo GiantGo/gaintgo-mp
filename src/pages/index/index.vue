@@ -4,10 +4,14 @@
       <i-button open-type="getUserInfo" type="success" @getuserinfo="getUserInfo" v-if="!token">获取订单</i-button>
       <div class="tips-container">
         <div class="tip">
-          <span class="text">预设模式是您的房间还没分配之前的时候可以预先设置</span>
+          <span class="text">
+            <text class="iconfont icon-bofang"></text> 预设模式是您的房间还没分配之前的时候可以预先设置
+          </span>
         </div>
         <div class="tip">
-          <span class="text">实时控制模式是您的房间已经分配之后可以实时控制房间</span>
+          <span class="text">
+            <text class="iconfont icon-bofang"></text> 实时控制模式是您的房间已经分配之后可以实时控制房间
+          </span>
         </div>
       </div>
       <div class="card" :title="order.orderTypeName"
@@ -127,6 +131,14 @@ export default {
 </script>
 
 <style scoped>
+  button::after {
+    border-radius: 0;
+  }
+
+  button {
+    border-radius: 0;
+  }
+
   .index-container {
     flex-direction: column;
   }

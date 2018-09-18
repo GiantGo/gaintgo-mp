@@ -10,7 +10,7 @@
         </view>
       </scroll-view>
     </view>
-    <scroll-view scroll-y="true" class="setting-wrapper">
+    <scroll-view scroll-y="true">
       <picture-box></picture-box>
       <music-list></music-list>
       <record></record>
@@ -66,7 +66,5 @@ export default {
 </script>
 
 <style scoped>
-  .setting-wrapper {
-    flex: 1;
-  }
+
 </style>

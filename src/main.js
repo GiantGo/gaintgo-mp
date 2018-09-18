@@ -4,6 +4,8 @@ import store from '@/store'
 
 import socket from '@/utils/socket'
 
+import '@/font/iconfont.css'
+
 Vue.config.productionTip = false
 Vue.prototype.$store = store
 Vue.prototype.$socket = socket

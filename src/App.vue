@@ -32,56 +32,51 @@ export default {
     -o-transition: width 2s;
   }
 
-  button::after {
-    border-radius: 0;
-  }
-
   button {
-    border-radius: 0;
+    font-size: 14px;
+    height: 44px;
+    line-height: 44px;
   }
 
   .menu-wrapper {
     flex: 0 0 80px;
     width: 80px;
-    background: #f3f5f7;
+    background: #e4e4e4;
   }
 
   .menu-wrapper .menu-item {
-    display: table;
-    width: 56px;
-    height: 54px;
-    line-height: 14px;
-    padding: 0 12px;
+    text-align: center;
+    width: 80px;
+    height: 45px;
+    line-height: 45px;
     border-bottom: 1px solid rgba(7, 17, 27, 0.1);
+    padding: 5px 0;
   }
 
   .menu-wrapper .menu-item.active {
     position: relative;
     z-index: 10;
-    margin-top: -1px;
-    background: #fff;
-    font-weight: 700;
+    background: #ffffff;
   }
 
   .menu-wrapper .menu-item.active .text {
-    border: none;
-  }
-
-  .menu-wrapper .menu-item .icon {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    vertical-align: top;
-    margin-right: 4px;
-    background-size: 12px 12px;
-    background-repeat: no-repeat;
+    border-right: 2px solid #e66a1a;
+    font-weight: normal;
+    box-sizing: border-box;
   }
 
   .menu-wrapper .menu-item .text {
-    display: table-cell;
-    width: 56px;
+    width: 80px;
     vertical-align: middle;
     position: relative;
-    font-size: 12px;
+    font-size: 14px;
+  }
+
+  .setting-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex: 1;
   }
 </style>

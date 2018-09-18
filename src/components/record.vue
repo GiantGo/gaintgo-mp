@@ -1,17 +1,25 @@
 <template>
-  <div v-if="currentMenu === '录音'">
-    <button @click="play">
-      播放
-    </button>
-    <button @click="start">
-      开始录音
-    </button>
-    <button @click="stop">
-      结束
-    </button>
-    <button @click="upload">
-      上传
-    </button>
+  <div class="setting-wrapper" v-if="currentMenu === '录音'">
+    <div class="record">
+      <text class="iconfont icon-maikefenghuatongyuyin"></text>
+    </div>
+    <div class="tips">
+      <text class="iconfont icon-jiantou"></text>
+      录制时长最多不超过十分钟哦~
+    </div>
+    <div class="voice-bar">
+      <text class="iconfont icon-yuyin"></text>
+      <text class="second">50"</text>
+    </div>
+    <div class="upload">
+      <button class="upload-btn" @click="upload">
+        确认上传
+      </button>
+    </div>
+    <div class="tips">
+      <text class="iconfont icon-jiantou"></text>
+      点击确认上传会将录音上传到云端
+    </div>
   </div>
 </template>
 
@@ -118,5 +126,65 @@ export default {
 </script>
 
 <style scoped>
+  .record {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    margin-top: 20px;
+    border-radius: 50%;
+    background: #99867f;
+  }
 
+  .record .iconfont {
+    font-size: 50px;
+    color: #ffffff;
+  }
+
+  .tips {
+    font-size: 14px;
+  }
+
+  .tips .iconfont {
+    color: #e66a1a;
+  }
+
+  .voice-bar {
+    width: 170px;
+    height: 35px;
+    padding: 0 10px;
+    background: #a5897e;
+    border-radius: 5px;
+  }
+
+  .voice-bar .iconfont, .voice-bar .second {
+    height: 35px;
+    line-height: 35px;
+  }
+
+  .voice-bar .iconfont {
+    color: #ffffff;
+  }
+
+  .voice-bar .second {
+    float: right;
+    font-size: 14px;
+    color: #dedede;
+  }
+
+  .upload-btn {
+    width: 150px;
+    height: 44px;
+    background: #574640;
+    color: #ffffff;
+  }
+
+  .tips {
+    margin-top: 15px;
+  }
+
+  .voice-bar, .upload {
+    margin-top: 40px;
+  }
 </style>
