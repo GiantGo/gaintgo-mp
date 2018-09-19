@@ -42,6 +42,7 @@ export default {
   },
   watch: {
     currentMenu (menuName) {
+      console.log(menuName)
       if (menuName === '音乐') {
         this.searchMusic()
       }

@@ -10,18 +10,17 @@
         </view>
       </scroll-view>
     </div>
-    <scroll-view scroll-y="true" class="setting-wrapper">
-      <div v-for="(file, index) in files" :key="file.fileUrl">
-        <div @click="toggleFile(file)">
-          {{file.checked}}
-          <img :src="file.fileUrl"/>
-        </div>
+    <scroll-view scroll-y="true" class="setting-wrapper picture-list">
+      <div v-for="(file, index) in files" :key="file.fileUrl" class="picture" @click="toggleFile(file)">
+        <img class="picture-img" :src="file.fileUrl"/>
       </div>
       <div v-show="currentMenu === '自定义'">
         <button @click="uploadFile">上传</button>
       </div>
-      <button @click="savePictureBox">保存</button>
     </scroll-view>
+    <div class="operator">
+      <button class="save-btn" @click="savePictureBox">保存</button>
+    </div>
   </div>
 </template>
 
@@ -111,7 +110,23 @@ export default {
 </script>
 
 <style scoped>
-  .setting-wrapper {
-    flex: 1;
+  .menu-wrapper, .picture-list {
+    bottom: 50px;
+  }
+
+  .picture {
+    display: inline-block;
+    margin-left: 15px;
+    margin-bottom: 10px;
+  }
+
+  .picture .picture-img {
+    width: 125px;
+    height: 140px;
+  }
+
+  .operator {
+    position: absolute;
+    bottom: 12px;
   }
 </style>

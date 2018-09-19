@@ -1,7 +1,8 @@
 <template>
   <div class="picture-container" v-show="currentMenu === '画框'">
     <div class="picture" v-for="(picture, index) in pictureBoxes" :key="picture.id">
-      <img class="picture-img" :style="{width: picture.property.width, height: picture.property.height}"
+      <div class="text">{{picture.property.name}}</div>
+      <img class="picture-img"
            :src="picture.property.imageUrl" background-size="cover" @click="navigateToPicker(picture.id)"/>
     </div>
   </div>
@@ -56,10 +57,21 @@ export default {
 
 <style scoped>
   .picture-container {
-    padding: 10px;
+    padding: 20px;
   }
 
   .picture {
     display: inline-block;
+    padding: 0 10px;
+  }
+
+  .picture .text {
+    font-size: 14px;
+  }
+
+  .picture .picture-img {
+    width: 100px;
+    height: 200px;
+    margin-top: 10px;
   }
 </style>

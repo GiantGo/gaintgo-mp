@@ -10,7 +10,7 @@
         </view>
       </scroll-view>
     </view>
-    <scroll-view scroll-y="true">
+    <scroll-view scroll-y="true" class="setting-wrapper">
       <picture-box></picture-box>
       <music-list></music-list>
       <record></record>
@@ -52,11 +52,11 @@ export default {
       }
     }
   },
-  onShow () {
+  onLoad () {
+    this.orderId = this.$root.$mp.query.orderId
+  },
+  mounted () {
     const that = this
-    const query = this.$root.$mp.query
-
-    that.orderId = query.orderId
 
     that.$store.dispatch('getOrder', {
       orderId: that.orderId

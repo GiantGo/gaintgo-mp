@@ -4,14 +4,12 @@
       <i-button open-type="getUserInfo" type="success" @getuserinfo="getUserInfo" v-if="!token">获取订单</i-button>
       <div class="tips-container">
         <div class="tip">
-          <span class="text">
-            <text class="iconfont icon-bofang"></text> 预设模式是您的房间还没分配之前的时候可以预先设置
-          </span>
+          <text class="iconfont icon-gonggao"></text>
+          预设模式是您的房间还没分配之前的时候可以预先设置
         </div>
         <div class="tip">
-          <span class="text">
-            <text class="iconfont icon-bofang"></text> 实时控制模式是您的房间已经分配之后可以实时控制房间
-          </span>
+          <text class="iconfont icon-gonggao"></text>
+          实时控制模式是您的房间已经分配之后可以实时控制房间
         </div>
       </div>
       <div class="card" :title="order.orderTypeName"
@@ -158,6 +156,10 @@ export default {
   .tips-container .tip {
     flex: 1;
     padding: 8px 10px 0 10px;
+  }
+
+  .tips-container .tip .iconfont {
+    color: #e66a1a;
   }
 
   .card-container {

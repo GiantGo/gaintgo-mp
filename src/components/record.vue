@@ -1,5 +1,5 @@
 <template>
-  <div class="setting-wrapper" v-if="currentMenu === '录音'">
+  <div class="record-container" v-if="currentMenu === '录音'">
     <button class="record-btn" @touchstart="start" @touchend="stop">
       <text class="iconfont icon-maikefenghuatongyuyin"></text>
     </button>
@@ -62,7 +62,7 @@ export default {
       const that = this
 
       that.$store.dispatch('getRecord', that.order.orderId).then(response => {
-        that.record = response.data
+        that.record.path = response.data
       })
     },
     start () {
@@ -73,7 +73,10 @@ export default {
       }
 
       this.recorderManager.onStart(() => {
-        console.log('recorder start')
+        $Toast({
+          content: '录音已开始',
+          icon: 'translation_fill'
+        })
       })
       this.recorderManager.onPause(() => {
         console.log('recorder pause')
@@ -93,17 +96,19 @@ export default {
     },
     play () {
       const that = this
+      const path = that.record.tempFilePath || this.record.path
 
-      if (this.record.path) {
-        that.innerAudioContext.autoplay = true
-        that.innerAudioContext.src = that.record.tempFilePath || this.record.path
-        that.innerAudioContext.onPlay(() => {
+      if (path) {
+        const innerAudioContext = wx.createInnerAudioContext()
+        innerAudioContext.autoplay = true
+        innerAudioContext.src = path
+        innerAudioContext.onPlay(() => {
           console.log('开始播放')
         })
-        that.innerAudioContext.onCanplay(() => {
-          that.record.time = that.innerAudioContext.duration
+        innerAudioContext.onCanplay(() => {
+          that.record.time = innerAudioContext.duration
         })
-        that.innerAudioContext.onError((res) => {
+        innerAudioContext.onError((res) => {
           console.log(res.errMsg)
           console.log(res.errCode)
         })
@@ -136,16 +141,17 @@ export default {
         })
       }
     }
-  },
-  onShow () {
-    const that = this
-
-    that.innerAudioContext = wx.createInnerAudioContext()
   }
 }
 </script>
 
 <style scoped>
+  .record-container {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
   .record-btn {
     display: flex;
     justify-content: center;

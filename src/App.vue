@@ -16,6 +16,7 @@ export default {
 <style>
   .container {
     display: flex;
+    flex-wrap: wrap;
     position: absolute;
     width: 100%;
     top: 0;
@@ -74,9 +75,6 @@ export default {
 
   .setting-wrapper {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
     flex: 1;
   }
 </style>
