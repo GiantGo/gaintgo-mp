@@ -1,15 +1,15 @@
 <template>
   <div class="setting-wrapper" v-if="currentMenu === '录音'">
-    <div class="record">
+    <button class="record-btn" @touchstart="start" @touchend="stop">
       <text class="iconfont icon-maikefenghuatongyuyin"></text>
-    </div>
+    </button>
     <div class="tips">
       <text class="iconfont icon-jiantou"></text>
       录制时长最多不超过十分钟哦~
     </div>
-    <div class="voice-bar">
+    <div class="voice-bar" @click="play" v-show="record.tempFilePath || record.path">
       <text class="iconfont icon-yuyin"></text>
-      <text class="second">50"</text>
+      <text class="second">{{record.time}}"</text>
     </div>
     <div class="upload">
       <button class="upload-btn" @click="upload">
@@ -31,13 +31,17 @@ const {$Toast} = require('../../static/iview/base/index')
 export default {
   data () {
     return {
-      record: {},
+      record: {
+        path: '',
+        time: 0,
+        tempFilePath: ''
+      },
       recorderManager: '',
       recordStatus: {
         recording: false,
         paused: true
       },
-      tempFilePath: ''
+      innerAudioContext: ''
     }
   },
   computed: {
@@ -75,7 +79,7 @@ export default {
         console.log('recorder pause')
       })
       this.recorderManager.onStop((res) => {
-        that.tempFilePath = res.tempFilePath
+        that.record.tempFilePath = res.tempFilePath
       })
 
       this.recorderManager.start({
@@ -88,14 +92,18 @@ export default {
       })
     },
     play () {
-      if (this.tempFilePath) {
-        const innerAudioContext = wx.createInnerAudioContext()
-        innerAudioContext.autoplay = true
-        innerAudioContext.src = this.tempFilePath
-        innerAudioContext.onPlay(() => {
+      const that = this
+
+      if (this.record.path) {
+        that.innerAudioContext.autoplay = true
+        that.innerAudioContext.src = that.record.tempFilePath || this.record.path
+        that.innerAudioContext.onPlay(() => {
           console.log('开始播放')
         })
-        innerAudioContext.onError((res) => {
+        that.innerAudioContext.onCanplay(() => {
+          that.record.time = that.innerAudioContext.duration
+        })
+        that.innerAudioContext.onError((res) => {
           console.log(res.errMsg)
           console.log(res.errCode)
         })
@@ -112,8 +120,15 @@ export default {
       }
     },
     upload () {
-      if (this.tempFilePath) {
-        this.$store.dispatch('uploadRecord', {filePath: this.tempFilePath, orderId: this.order.orderId})
+      const that = this
+
+      if (that.record.tempFilePath) {
+        that.$store.dispatch('uploadRecord', {
+          filePath: that.record.tempFilePath,
+          orderId: that.order.orderId
+        }).then(response => {
+          that.record.path = response.data
+        })
       } else {
         $Toast({
           content: '请先录音',
@@ -121,12 +136,17 @@ export default {
         })
       }
     }
+  },
+  onShow () {
+    const that = this
+
+    that.innerAudioContext = wx.createInnerAudioContext()
   }
 }
 </script>
 
 <style scoped>
-  .record {
+  .record-btn {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -137,7 +157,7 @@ export default {
     background: #99867f;
   }
 
-  .record .iconfont {
+  .record-btn .iconfont {
     font-size: 50px;
     color: #ffffff;
   }
