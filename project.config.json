@@ -7,9 +7,9 @@
 		"minified": true,
 		"newFeature": true
 	},
-	"miniprogramRoot": "./dist/",
+	"miniprogramRoot": "dist/",
 	"compileType": "miniprogram",
-	"appid": "touristappid",
+	"appid": "wx9149d6368978564f",
 	"projectname": "giantgo-mpvue",
 	"condition": {
 		"search": {

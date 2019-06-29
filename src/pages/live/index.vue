@@ -30,7 +30,7 @@ export default {
     },
     getUserInfo () {
       wx.request({
-        url: 'https://runighcat.com/api/user',
+        url: 'https://www.giantgogame.com/api/user',
         method: 'get',
         header: {
           'content-type': 'application/json',
@@ -54,7 +54,7 @@ export default {
   },
 
   created () {
-    const socket = io.connect('https://runighcat.com/webinar', {
+    const socket = io.connect('https://www.giantgogame.com/webinar', {
       path: '/socketio/socket.io'
     })
 

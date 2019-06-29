@@ -62,7 +62,7 @@ export default {
 
   created () {
     wx.request({
-      url: 'https://runighcat.com/api/user/token',
+      url: 'https://www.giantgogame.com/api/user/token',
       method: 'post',
       data: {
         'username': '15930181489',
